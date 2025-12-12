@@ -129,6 +129,41 @@ body {
   touch-action: none;
 }
 
+.slider-wrap {
+  width: 100%;
+  max-width: 720px;
+  padding: 8px 4px 4px;
+}
+
+#control-slider {
+  width: 100%;
+  appearance: none;
+  height: 12px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, rgba(251, 191, 36, 0.7), rgba(251, 191, 36, 0.35));
+  outline: none;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+#control-slider::-webkit-slider-thumb {
+  appearance: none;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: var(--accent);
+  border: 2px solid #fff3;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
+}
+
+#control-slider::-moz-range-thumb {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: var(--accent);
+  border: 2px solid #fff3;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
+}
+
 .tip {
   margin: 0;
   color: var(--muted);

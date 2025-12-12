@@ -34,8 +34,11 @@
 
   <main class="game-container">
     <canvas id="game-canvas" aria-label="Maze Drift canvas" role="img"></canvas>
+    <div class="slider-wrap">
+      <input type="range" min="0" max="100" value="50" id="control-slider" aria-label="Move ball left and right">
+    </div>
     <p class="tip">
-      Drag or tap to steer the ball. Arrow keys nudge left/right. Space or the restart button starts/restarts.
+      Drag or tap to steer the ball. On mobile, slide the bar below to move. Arrow keys nudge left/right. Space or the restart button starts/restarts.
     </p>
   </main>
 

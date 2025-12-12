@@ -11,14 +11,13 @@ const BASE_RADIUS = 6;
 const MAX_LIVES = 5;
 const MIN_LIVES = 1;
 let runTime = 0;
-let fontsReady = false;
 
 const GAP_EASY = { base: 190, min: 170, max: 230 };
 const GAP_HARD = { base: 135, min: 110, max: 175 };
 
 const ball = {
   x: GAME_W / 2,
-  y: GAME_H - 120,
+  y: GAME_H - 180,
   targetX: GAME_W / 2,
   radius: BASE_RADIUS * MAX_LIVES,
   speed: 9,
@@ -38,6 +37,7 @@ const controls = {
   pauseBtn: document.getElementById('pause-btn'),
   restartBtn: document.getElementById('restart-btn'),
   themeBtn: document.getElementById('theme-btn'),
+  slider: document.getElementById('control-slider'),
 };
 
 const colors = {
@@ -107,6 +107,7 @@ function resetGame() {
   }
   score = 0;
   scoreEl.textContent = '0';
+  syncSliderToBall();
 }
 
 function makeSegment(y, bottomGap, gapSettings) {
@@ -341,10 +342,11 @@ function startGame() {
   state = 'running';
   collisionGuard = 0.75; // brief grace to avoid instant collisions
   updatePauseButton();
+  syncSliderToBall();
 }
 
 function handlePointer(clientX) {
-  ball.targetX = worldXFromClient(clientX);
+  setTargetX(worldXFromClient(clientX), true);
   if (state === 'ready') {
     startGame();
   } else if (state === 'over') {
@@ -361,9 +363,9 @@ function handleKey(e) {
   if (state !== 'running') return;
   const nudge = 22;
   if (e.code === 'ArrowLeft') {
-    ball.targetX = clamp(ball.targetX - nudge, ball.radius, GAME_W - ball.radius);
+    setTargetX(ball.targetX - nudge, true);
   } else if (e.code === 'ArrowRight') {
-    ball.targetX = clamp(ball.targetX + nudge, ball.radius, GAME_W - ball.radius);
+    setTargetX(ball.targetX + nudge, true);
   }
 }
 
@@ -397,6 +399,18 @@ controls.restartBtn?.addEventListener('click', () => {
 
 controls.themeBtn?.addEventListener('click', () => {
   toggleTheme();
+});
+
+controls.slider?.addEventListener('input', (e) => {
+  const value = Number(e.target.value);
+  const pct = value / 100;
+  const target = ball.radius + pct * (GAME_W - 2 * ball.radius);
+  setTargetX(target, false);
+  if (state === 'ready') {
+    startGame();
+  } else if (state === 'over') {
+    startGame();
+  }
 });
 
 // Service worker registration
@@ -491,4 +505,17 @@ function drawBallCircle() {
   ctx.beginPath();
   ctx.arc(ball.x, ball.y, r, 0, Math.PI * 2);
   ctx.fill();
+}
+
+function setTargetX(x, syncSlider = false) {
+  ball.targetX = clamp(x, ball.radius, GAME_W - ball.radius);
+  if (syncSlider) {
+    syncSliderToBall();
+  }
+}
+
+function syncSliderToBall() {
+  if (!controls.slider) return;
+  const pct = ((ball.targetX - ball.radius) / (GAME_W - 2 * ball.radius)) * 100;
+  controls.slider.value = Math.round(clamp(pct, 0, 100));
 }
