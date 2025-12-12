@@ -143,6 +143,7 @@ body {
   background: linear-gradient(90deg, rgba(251, 191, 36, 0.7), rgba(251, 191, 36, 0.35));
   outline: none;
   border: 1px solid rgba(255, 255, 255, 0.08);
+  touch-action: pan-x;
 }
 
 #control-slider::-webkit-slider-thumb {

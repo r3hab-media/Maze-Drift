@@ -405,7 +405,7 @@ controls.slider?.addEventListener('input', (e) => {
   const value = Number(e.target.value);
   const pct = value / 100;
   const target = ball.radius + pct * (GAME_W - 2 * ball.radius);
-  setTargetX(target, false);
+  setTargetX(target, true, true);
   if (state === 'ready') {
     startGame();
   } else if (state === 'over') {
@@ -507,8 +507,11 @@ function drawBallCircle() {
   ctx.fill();
 }
 
-function setTargetX(x, syncSlider = false) {
+function setTargetX(x, syncSlider = false, snap = false) {
   ball.targetX = clamp(x, ball.radius, GAME_W - ball.radius);
+  if (snap) {
+    ball.x = ball.targetX;
+  }
   if (syncSlider) {
     syncSliderToBall();
   }
